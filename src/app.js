@@ -77,7 +77,9 @@ rl.on("line", async line => {
 					  ${resume.outerHTML}
 				  `;
 		}, overlay);
-
+		/**
+		 * viewport尽量小
+		 */
 		await page.setViewport({
 			width: 300,
 			height: 300
