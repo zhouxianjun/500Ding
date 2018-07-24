@@ -35,6 +35,10 @@ rl.on("line", async line => {
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
 		await page.goto("https://www.baidu.com/");
+		/**
+		 *  不用await的原因是这个页面加载很久，
+		 *  但其实很早已经加载好了，用await会超时
+		 */
 		page.goto(url);
 		console.log("正在生成登录二维码");
 		await sleep(5);
