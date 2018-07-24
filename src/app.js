@@ -78,7 +78,7 @@ rl.on("line", async line => {
 				  `;
 		}, overlay);
 		/**
-		 * viewport尽量小
+		 * viewport尽量 小
 		 */
 		await page.setViewport({
 			width: 300,
