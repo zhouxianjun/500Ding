@@ -67,7 +67,6 @@ rl.on("line", async line => {
 			}
 		});
 		const overlay = await page.$(".wbdCv-baseStyle");
-		await overlay.screenshot({ path: "test.png" });
 		await page.evaluate(resume => {
 			resume = resume.cloneNode(true);
 			resume.style.height = "1160px";
