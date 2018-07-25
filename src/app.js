@@ -34,7 +34,7 @@ rl.on("line", async line => {
 	} else {
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
-		await page.goto("https://www.baidu.com/");
+		await page.goto(url);
 		/**
 		 *  不用await的原因是这个页面加载很久，
 		 *  但其实很早已经加载好了，用await会超时
