@@ -2,24 +2,24 @@ require("colors");
 const ProgressBar = require("progress");
 const puppeteer = require("puppeteer");
 const readline = require("readline");
-var rl = readline.createInterface({
+const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
 const sleep = ms => {
-	var bar = new ProgressBar("  [:bar] :percent :etas", {
+	const bar = new ProgressBar("  [:bar] :percent :etas", {
 		complete: "=",
 		incomplete: " ",
 		width: 20,
 		total: ms
 	});
-	return new Promise(async reslove => {
+	return new Promise(async resolve => {
 		let timer = setInterval(function() {
 			bar.tick();
 			if (bar.complete) {
 				console.log("\ncomplete\n");
 				clearInterval(timer);
-				reslove();
+				resolve();
 			}
 		}, 1000);
 	});
@@ -34,7 +34,7 @@ rl.on("line", async line => {
 	} else {
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
-		await page.goto("https://www.baidu.com/");
+		await page.goto(url);
 		/**
 		 *  不用await的原因是这个页面加载很久，
 		 *  但其实很早已经加载好了，用await会超时
@@ -42,8 +42,8 @@ rl.on("line", async line => {
 		page.goto(url);
 		console.log("正在生成登录二维码");
 		await sleep(5);
-		await page.screenshot({ path: "qrcode.png" });
-		console.log("请在15秒钟内扫码qrcode.png登录".green);
+		await page.screenshot({ path: "./src/登录二维码.png" });
+		console.log("请在15秒钟内扫码 src目录下“登录二维码.png”登录".green);
 		await sleep(15);
 		/**
 		 * 因为扫码登录后返回个人主页，所以需要再次跳转
@@ -85,11 +85,11 @@ rl.on("line", async line => {
 			height: 300
 		});
 		await page.pdf({
-			path: "简历.pdf",
+			path: "./src/简历.pdf",
 			printBackground: true,
 			format: "A4"
 		});
-		console.log("简历已生成".green);
+		console.log("简历已生成，src目录下“简历.pdf”".green);
 		await browser.close();
 		rl.close();
 	}
