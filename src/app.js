@@ -1,6 +1,6 @@
 require("colors");
+const puppeteerResolver = require("puppeteer-chromium-resolver");
 const ProgressBar = require("progress");
-const puppeteer = require("puppeteer");
 const readline = require("readline");
 const rl = readline.createInterface({
 	input: process.stdin,
@@ -32,7 +32,21 @@ rl.on("line", async line => {
 	if (!isUrl) {
 		console.log("请输入合法的url".red);
 	} else {
-		const browser = await puppeteer.launch();
+        const revisionInfo = await puppeteerResolver({
+            revision: "",
+            detectionPath: "",
+            folderName: '.chromium-browser-snapshots',
+            hosts: ["https://storage.googleapis.com", "https://npm.taobao.org/mirrors"],
+            retry: 3
+        });
+        const browser = await revisionInfo.puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox'],
+            executablePath: revisionInfo.executablePath
+        }).catch(function (error) {
+            console.log(error);
+        });
+		// const browser = await puppeteer.launch();
 		const page = await browser.newPage();
 		await page.goto(url);
 		/**
@@ -64,19 +78,23 @@ rl.on("line", async line => {
 			let nullcon = document.getElementsByClassName("addCustomItem");
 			for (let i = 0; i < nullcon.length; i++) {
 				nullcon[i].style.display = "none";
-			}
+            }
+            document.body.style.padding = 0;
+            document.body.style.margin = 0;
+            document.body.style.background = 'none';
 		});
 		const overlay = await page.$(".wbdCv-baseStyle");
 		await page.evaluate(resume => {
 			resume = resume.cloneNode(true);
-			resume.style.height = "1160px";
-			resume.style.overflow = "hidden";
+			// resume.style.height = "1160px";
+            // resume.style.overflow = "hidden";
 			document.documentElement.style.minWidth = 0;
 			document.body.style.minWidth = 0;
 			document.body.innerHTML = `
 					  ${resume.outerHTML}
 				  `;
-		}, overlay);
+        }, overlay);
+        await page.screenshot({ path: "./src/1.png" });
 		/**
 		 * viewport尽量 小
 		 */
